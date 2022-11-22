@@ -1,0 +1,65 @@
+#!/bin/bash
+#
+# navigator
+#
+# navigator is a script to allow fast and easy directory navigation.
+#
+# Version: 1.0.0
+# Author:  Lawrence Lagerlof <llagerlof@gmail.com>
+# GitHub:  http://github.com/llagerlof/navigator
+# License: https://opensource.org/licenses/MIT
+#
+# Required dependency:
+#   - fzf (fuzzy finder. Your distro probably has it available to install. If not, go to https://github.com/junegunn/fzf)
+#
+# Optional dependencies:
+#   - xclip (the current directory's path or last opened file's path is always copied to the clipboard)
+#   - xdg-open (open the selected file with associated application)
+#
+# How to install it:
+#
+#   - Copy this script to "/usr/local/bin/"
+#
+#   - Create an alias in your ~/.bashrc . Add the following line to the end of file:
+#
+#     alias n="source /usr/local/bin/navigator"
+#
+#   - Run the script typing "n" anywhere (you can choose another alias if you wish)
+#
+# Features tailored for best user experience:
+#   - The last created directories are near the focused cursor for quick access the last created directories.
+#   - Always focus on directory ".." when changing directory to allow quick exit to the parent directory.
+#   - Files are listed separated from the directories.
+#   - Files can be opened with the associated application.
+#   - Fuzzy finder
+#
+
+# Loop until ESC
+running=1
+while [ $running == 1 ]
+do
+    # Allow directory and file selection using fzf
+    selected=$((echo ".."; ls --sort=time -d -- */ .*/ 2>/dev/null; printf "\n";ls -p 2>/dev/null | grep -v /) | fzf --prompt "$PWD/" --height=50%)
+
+    # Perform some action if a file or directory was selected (with ENTER)
+    if [ "$selected" != "" ]; then
+        # Copy the selected directory of file's name to the clipboard
+        if command -v xclip &> /dev/null ;then
+            realpath "$selected" | tr -d '\n' | xclip -selection clipboard
+            realpath "$selected" | tr -d '\n' | xclip
+        fi
+
+        if [ -d "$selected" ] && [ ! -L "$selected" ] ;then
+            # If the selected item is a directory, enter it
+            cd "$selected" 2>/dev/null
+        else
+            # If the selected item is a file, open it with the associated application
+            if command -v xdg-open &> /dev/null ;then
+                xdg-open "$selected"
+            fi
+        fi
+    else
+        # ESC = exit
+        running=0
+    fi
+done
