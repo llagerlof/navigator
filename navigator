@@ -4,10 +4,17 @@
 #
 # navigator is a script to allow fast and easy directory navigation.
 #
-# Version: 1.0.0
+# Version: 1.0.1
 # Author:  Lawrence Lagerlof <llagerlof@gmail.com>
 # GitHub:  http://github.com/llagerlof/navigator
 # License: https://opensource.org/licenses/MIT
+#
+# Features, tailored for best user experience:
+#   - The last created directories are near the focused cursor for quick access the last created directories.
+#   - Always focus on directory ".." when changing directory to allow quick exit to the parent directory.
+#   - Files are listed separated from the directories.
+#   - Files can be opened with the associated application.
+#   - Fuzzy finder
 #
 # Required dependency:
 #   - fzf (fuzzy finder. Your distro probably has it available to install. If not, go to https://github.com/junegunn/fzf)
@@ -26,20 +33,13 @@
 #
 #   - Run the script typing "n" anywhere (you can choose another alias if you wish)
 #
-# Features tailored for best user experience:
-#   - The last created directories are near the focused cursor for quick access the last created directories.
-#   - Always focus on directory ".." when changing directory to allow quick exit to the parent directory.
-#   - Files are listed separated from the directories.
-#   - Files can be opened with the associated application.
-#   - Fuzzy finder
-#
 
 # Loop until ESC
 running=1
 while [ $running == 1 ]
 do
     # Allow directory and file selection using fzf
-    selected=$((echo ".."; ls --sort=time -d -- */ .*/ 2>/dev/null; printf "\n";ls -p 2>/dev/null | grep -v /) | fzf --prompt "$PWD/" --height=50%)
+    selected=$((echo ".."; command ls --sort=time -d -- */ .*/ 2>/dev/null; printf "\n"; command ls -p 2>/dev/null | grep -v /) | fzf --prompt "$PWD/" --height=50%)
 
     # Perform some action if a file or directory was selected (with ENTER)
     if [ "$selected" != "" ]; then
