@@ -11,7 +11,7 @@ Navigator is a script to allow fast and easy directory navigation.
 - Files can be opened with the associated application.
 - Fuzzy search.
 
-![Captura de tela de 2022-11-22 13-17-15](https://user-images.githubusercontent.com/193798/203366322-41ea9424-c7b7-4e57-a06a-84bdb42edff8.png)
+![Captura de tela de 2022-11-25 12-24-28](https://user-images.githubusercontent.com/193798/204015683-85bbe328-ec2f-497e-9b54-89f3f625daf7.png)
 
 
 ## Required dependency
