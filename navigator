@@ -4,7 +4,7 @@
 #
 # navigator is a script to allow fast and easy directory navigation.
 #
-# Version: 1.0.1
+# Version: 1.0.2
 # Author:  Lawrence Lagerlof <llagerlof@gmail.com>
 # GitHub:  http://github.com/llagerlof/navigator
 # License: https://opensource.org/licenses/MIT
@@ -39,7 +39,7 @@ running=1
 while [ $running == 1 ]
 do
     # Allow directory and file selection using fzf
-    selected=$((echo ".."; command ls --sort=time -d -- */ .*/ 2>/dev/null; printf "\n"; command ls -p 2>/dev/null | grep -v /) | fzf --prompt "$PWD/" --height=50%)
+    selected=$((echo ".."; command ls --sort=time -d -- */ .*/ 2>/dev/null; printf "\n"; command ls -p 2>/dev/null | grep -v /) | fzf --prompt "$PWD/" --height=50% --no-info)
 
     # Perform some action if a file or directory was selected (with ENTER)
     if [ "$selected" != "" ]; then
