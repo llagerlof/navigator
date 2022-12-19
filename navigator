@@ -4,7 +4,7 @@
 #
 # navigator is a script to allow fast and easy directory navigation.
 #
-# Version: 1.0.2
+# Version: 1.1.0
 # Author:  Lawrence Lagerlof <llagerlof@gmail.com>
 # GitHub:  http://github.com/llagerlof/navigator
 # License: https://opensource.org/licenses/MIT
@@ -38,8 +38,17 @@
 running=1
 while [ $running == 1 ]
 do
+    parent_dir=""
+    prompt_fzf="$PWD"
+    # The parente directory .. should appear only if the current directory isn't the root one /
+    if [ "$PWD" != "/" ]; then
+        parent_dir=".."
+        # The prompt with backslash after the last directory in path at the bottom of fzf UI
+        prompt_fzf="$PWD/"
+    fi
+
     # Allow directory and file selection using fzf
-    selected=$((echo ".."; command ls --sort=time -d -- */ .*/ 2>/dev/null; printf "\n"; command ls -p 2>/dev/null | grep -v /) | fzf --prompt "$PWD/" --height=50% --no-info)
+    selected=$((if [ "$parent_dir" != "" ]; then echo "$parent_dir"; fi; command ls --sort=time -d -- */ .*/ 2>/dev/null; printf "\n"; command ls -p 2>/dev/null | grep -v /) | fzf --prompt "$prompt_fzf" --height=50% --no-info)
 
     # Perform some action if a file or directory was selected (with ENTER)
     if [ "$selected" != "" ]; then
