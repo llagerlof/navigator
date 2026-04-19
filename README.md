@@ -25,15 +25,64 @@ Navigator is a script to allow fast and easy directory navigation.
 - **xdg-open** (package xdg-utils) - reason: Allow the Navigator to open the selected file with the associated application.
 
 
-## How to install
+## Installation
 
-- Copy this script to `/usr/local/bin/`
-- Make it executable with `chmod +x /usr/local/bin/navigator`
-- Create an alias in your `~/.bashrc`. Add the following line to the end of file:
+Navigator needs to be **sourced** from your shell so it can change your current directory. After installing the script, add an alias like this to `~/.bashrc`:
+
+```bash
+alias n="source /path/to/navigator"
 ```
-alias n="source /usr/local/bin/navigator"
+
+Then reopen your shell, or run `source ~/.bashrc`.
+
+### Install only for the current user
+
+#### Option 1: clone the repository and symlink the script into `~/.local/bin`
+
+```bash
+mkdir -p ~/repos ~/.local/bin
+git clone https://github.com/llagerlof/navigator.git ~/repos/navigator
+chmod +x ~/repos/navigator/navigator
+ln -s ~/repos/navigator/navigator ~/.local/bin/navigator
+echo 'alias n="source ~/.local/bin/navigator"' >> ~/.bashrc
+source ~/.bashrc
 ```
-- Reopen the shell to reload the aliases.
+
+If you prefer, you can replace `~/repos` with `~/repositories`.
+
+#### Option 2: download the script directly into `~/.local/bin`
+
+```bash
+mkdir -p ~/.local/bin
+curl -fsSL https://raw.githubusercontent.com/llagerlof/navigator/master/navigator -o ~/.local/bin/navigator
+chmod +x ~/.local/bin/navigator
+echo 'alias n="source ~/.local/bin/navigator"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+### Install for everyone
+
+#### Option 3: clone the repository into a normal user's home directory and symlink it into `/usr/local/bin`
+
+```bash
+mkdir -p ~/repos
+git clone https://github.com/llagerlof/navigator.git ~/repos/navigator
+chmod +x ~/repos/navigator/navigator
+sudo ln -s ~/repos/navigator/navigator /usr/local/bin/navigator
+echo 'alias n="source /usr/local/bin/navigator"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+If you prefer, you can replace `~/repos` with `~/repositories`. Make sure other users can read and execute the cloned directory if they need to use the shared symlink.
+
+#### Option 4: download the script directly into `/usr/local/bin`
+
+```bash
+sudo curl -fsSL https://raw.githubusercontent.com/llagerlof/navigator/master/navigator -o /usr/local/bin/navigator
+sudo chmod +x /usr/local/bin/navigator
+echo 'alias n="source /usr/local/bin/navigator"' >> ~/.bashrc
+source ~/.bashrc
+```
 
 
 ## How to use
